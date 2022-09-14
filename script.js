@@ -12,13 +12,14 @@ let startTime;
 let questionText = "";
 
 // Load and display question
+const loadQuestion = () =>{
 fetch("./texts.json")
   .then((res) => res.json())
   .then((data) => {
     questionText = data[Math.floor(Math.random() * data.length)];
     question.innerHTML = questionText;
   });
-
+}
 // checks the user typed character and displays accordingly
 const typeController = (e) => {
   const newLetter = e.key;
@@ -52,6 +53,7 @@ const typeController = (e) => {
   // check if given question text is equal to user typed text
   if (questionText === userText) {
     gameOver();
+    loadQuestion();
   }
 };
 
@@ -109,8 +111,8 @@ const start = () => {
   countdownOverlay.style.display = "flex";
 
   const startCountdown = setInterval(() => {
-    countdownOverlay.innerHTML = `<h1>${count}</h1>`;
-
+    
+    countdownOverlay.innerHTML = `<h1>${count!=-1?count:3}</h1>`;
     // finished timer
     if (count < 0) {
       // -------------- START TYPING -----------------
@@ -139,3 +141,5 @@ setInterval(() => {
 
   document.getElementById("show-time").innerHTML = `${startTime ? Math.round(timeSpent) : 0} seconds`;
 }, 1000);
+
+loadQuestion();
